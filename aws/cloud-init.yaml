@@ -1,0 +1,17 @@
+#cloud-config
+
+runcmd:
+  - [ wget, "https://cloudron.io/cloudron-setup" ]
+  - [ chmod, +x, cloudron-setup ]
+  - './cloudron-setup --skip-reboot --data ''${replace(cloudronData, "\n", "")}'''
+
+  #hack remove assertion to enable instance profile s3 access (v1.1.0)
+  - sed -i '44d' /home/yellowtent/box/src/storage/s3.js
+
+  #hack to enable R53 hosted zone dns  (v1.1.0)
+  - sed -i 's/"fqdn"/"zoneName":"${domain}",\n"fqdn"/' /home/yellowtent/configs/cloudron.conf
+
+  # reboot
+  - systemctl stop mysql
+  - systemctl reboot
+
