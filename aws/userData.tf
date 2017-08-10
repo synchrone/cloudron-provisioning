@@ -3,6 +3,16 @@ data "template_file" "user_data" {
 
   vars {
     domain = "${var.domain}"
+    mail_relay = <<EOF
+{
+    "provider":"ses-smtp",
+    "host":"email-smtp.${var.region}.amazonaws.com",
+    "port":"587",
+    "tls":true,
+    "username":"${aws_iam_access_key.ses_smtp.id}",
+    "password":"${aws_iam_access_key.ses_smtp.ses_smtp_password}"
+}
+EOF
     cloudronData = <<EOF
 {
   "boxVersionsUrl": "https://s3.amazonaws.com/prod-cloudron-releases/versions.json",

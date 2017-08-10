@@ -9,7 +9,10 @@ runcmd:
   - sed -i '44d' /home/yellowtent/box/src/storage/s3.js
 
   #hack to enable R53 hosted zone dns  (v1.1.0)
-  - sed -i 's/"fqdn"/"zoneName":"${domain}",\n"fqdn"/' /home/yellowtent/configs/cloudron.conf
+  - cat /home/yellowtent/configs/cloudron.conf | grep -v zoneName | sed 's/"fqdn"/"zoneName":"${domain}",\n"fqdn"/' > /home/yellowtent/configs/cloudron.conf
+
+  #hack mail relay since it's not supported in Data (1.2.0+)
+  - mysql -u root -ppassword -e "REPLACE INTO settings (name, value) VALUES (\"mail_relay\", '${replace(replace(mail_relay,"\"","\\\""),"\n","")}')" box
 
   # reboot
   - systemctl stop mysql

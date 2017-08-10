@@ -7,13 +7,19 @@ variable "ec2_public_key_name" {
   description = "AWS Public key to allow you to ssh into machine"
   default = ""
 }
+variable "r53_delegation_set" {
+  type = "string"
+  default = ""
+  description = "Reusable delegation set ID"
+}
+
 variable "region" {
   type = "string"
   default = "eu-west-1"
 }
 variable "version" {
   type = "string"
-  default = "1.1.0"
+  default = "1.4.1"
 }
 variable "cloudron_restore_url" {
   type = "string"
@@ -71,11 +77,22 @@ resource "aws_s3_bucket" "backups" {
 }
 
 # ======================================================
-
-output "domain" {
-  value = "${var.domain}"
-}
 output "zone_ns" {
   value = "${aws_route53_zone.cloudron_zone.name_servers}"
   description = "Update your NS records in the domain registrar's control panel to these:"
+}
+
+output "cloudron_installation_complete" {
+  value = <<EOF
+==============================================================
+Thank you for installing Cloudron!
+
+The cloud resources have been successfully created, but some processes are still active in background.
+
+Please wait a couple minutes and try navigating your browser to https://${var.domain} to finish the installation.
+
+Backups will be stored under https://s3.console.aws.amazon.com/s3/buckets/${aws_s3_bucket.backups.id}
+
+Enjoy self-hosting!
+EOF
 }
