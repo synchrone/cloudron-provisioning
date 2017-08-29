@@ -1,5 +1,5 @@
 resource "aws_route53_zone" "cloudron_zone" {
-  name = "${var.domain}"
+  name = "${var.domain}."
   delegation_set_id = "${var.r53_delegation_set}"
 }
 resource "aws_route53_record" "ns" {

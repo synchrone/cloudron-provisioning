@@ -19,7 +19,7 @@ variable "region" {
 }
 variable "version" {
   type = "string"
-  default = "1.4.1"
+  default = "1.6.2"
 }
 variable "cloudron_restore_url" {
   type = "string"

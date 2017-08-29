@@ -43,6 +43,7 @@ EOF
     "prerelease": false
   },
   "fqdn": "${var.domain}",
+  "zoneName": "${var.domain}",
   "version": "${var.version}",
   "restore": {
       "url": "${var.cloudron_restore_url}",
