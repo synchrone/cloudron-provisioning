@@ -2,6 +2,10 @@ variable "domain" {
   type = "string"
   description = "The domain where to install Cloudron"
 }
+variable "mailgun_api_key" {
+  type = "string"
+  description = "Mailgun API Key"
+}
 variable "ec2_public_key_name" {
   type = "string"
   description = "AWS Public key to allow you to ssh into machine"

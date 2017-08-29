@@ -5,12 +5,12 @@ data "template_file" "user_data" {
     domain = "${var.domain}"
     mail_relay = <<EOF
 {
-    "provider":"ses-smtp",
-    "host":"email-smtp.${var.region}.amazonaws.com",
+    "provider":"mailgun-smtp",
+    "host":"smtp.mailgun.org",
     "port":"587",
     "tls":true,
-    "username":"${aws_iam_access_key.ses_smtp.id}",
-    "password":"${aws_iam_access_key.ses_smtp.ses_smtp_password}"
+    "username":"${mailgun_domain.current.smtp_login}",
+    "password":"${mailgun_domain.current.smtp_password}"
 }
 EOF
     cloudronData = <<EOF
