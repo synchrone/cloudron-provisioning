@@ -97,6 +97,7 @@ The cloud resources have been successfully created, but some processes are still
 Please wait a couple minutes and try navigating your browser to https://${var.domain} to finish the installation.
 
 Backups will be stored under https://s3.console.aws.amazon.com/s3/buckets/${aws_s3_bucket.backups.id}
+Backup Encryption Key: ${random_id.backup_key.b64}
 
 Enjoy self-hosting!
 EOF

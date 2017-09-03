@@ -1,3 +1,11 @@
+resource "random_id" "backup_key" {
+  keepers = {
+    # Generate a new id each time we switch domain
+    value = "${var.domain}"
+  }
+  byte_length = 12
+}
+
 data "template_file" "user_data" {
   template = "${file("cloud-init.yaml")}"
 
@@ -31,7 +39,7 @@ EOF
   },
   "backupConfig" : {
     "provider":"s3",
-    "key":"",
+    "key":"${coalesce(var.cloudron_restore_key, random_id.backup_key.b64)}",
     "retentionSecs":2592000,
     "bucket":"${aws_s3_bucket.backups.id}",
     "prefix":"",
@@ -47,7 +55,7 @@ EOF
   "version": "${var.version}",
   "restore": {
       "url": "${var.cloudron_restore_url}",
-      "key": "${var.cloudron_restore_key}"
+      "key": "${coalesce(var.cloudron_restore_key, random_id.backup_key.b64)}"
   }
 }
 EOF
