@@ -24,8 +24,8 @@ EOF
   },
   "dnsConfig": {
     "provider":"route53",
-    "accessKeyId":null,
-    "secretAccessKey":null,
+    "accessKeyId":"${aws_iam_access_key.cloudron.id}",
+    "secretAccessKey":"${aws_iam_access_key.cloudron.secret}",
     "region":"us-east-1",
     "endpoint":null
   },
@@ -35,8 +35,8 @@ EOF
     "retentionSecs":2592000,
     "bucket":"${aws_s3_bucket.backups.id}",
     "prefix":"",
-    "accessKeyId":null,
-    "secretAccessKey":null,
+    "accessKeyId":"${aws_iam_access_key.cloudron.id}",
+    "secretAccessKey":"${aws_iam_access_key.cloudron.secret}",
     "region":"${var.region}"
   },
   "updateConfig": {

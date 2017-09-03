@@ -44,7 +44,7 @@ provider "mailgun" {
 }
 resource "random_id" "mailgun_password" {
   keepers = {
-    # Generate a new id each time we switch domain
+    # Generate a new id each time we switch the api key
     value = "${var.mailgun_api_key}"
   }
   byte_length = 12

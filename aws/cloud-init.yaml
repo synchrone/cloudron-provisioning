@@ -5,9 +5,6 @@ runcmd:
   - [ chmod, +x, cloudron-setup ]
   - './cloudron-setup --skip-reboot --data ''${replace(cloudronData, "\n", "")}'''
 
-  #hack remove assertion to enable instance profile s3 access (v1.1.0+)
-  - sed -i '44d' /home/yellowtent/box/src/storage/s3.js
-
   #hack mail relay since it's not supported in Data (1.2.0+)
   - mysql -u root -ppassword -e "REPLACE INTO settings (name, value) VALUES (\"mail_relay\", '${replace(replace(mail_relay,"\"","\\\""),"\n","")}')" box
 

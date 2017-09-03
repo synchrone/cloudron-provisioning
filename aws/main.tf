@@ -70,7 +70,6 @@ resource "aws_instance" "cloudron" {
   key_name = "${var.ec2_public_key_name}"
   user_data = "${data.template_file.user_data.rendered}"
   vpc_security_group_ids  = ["${aws_security_group.cloudron_sg.id}"]
-  iam_instance_profile = "${aws_iam_instance_profile.cloudron_iprofile.name}"
   root_block_device = {
     volume_size = 22 #GB
   }

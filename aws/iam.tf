@@ -1,30 +1,13 @@
-resource "aws_iam_instance_profile" "cloudron_iprofile" {
-  name  = "cloudron_instance"
-  role = "${aws_iam_role.cloudron_instance.name}"
-}
-
-resource "aws_iam_role" "cloudron_instance" {
-  name = "cloudron_instance"
+resource "aws_iam_user" "cloudron" {
+  name = "cloudron"
   path = "/"
-  assume_role_policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": "sts:AssumeRole",
-            "Principal": {
-               "Service": "ec2.amazonaws.com"
-            },
-            "Effect": "Allow",
-            "Sid": ""
-        }
-    ]
 }
-EOF
+resource "aws_iam_access_key" "cloudron" {
+  user    = "${aws_iam_user.cloudron.name}"
 }
-resource "aws_iam_role_policy" "cloudron_instance_policy" {
-  name = "cloudron_instance"
-  role = "${aws_iam_role.cloudron_instance.id}"
+resource "aws_iam_user_policy" "cloudron" {
+  name = "cloudron"
+  user = "${aws_iam_user.cloudron.name}"
   policy = <<EOF
 {
     "Version": "2012-10-17",
