@@ -1,44 +1,67 @@
 variable "domain" {
   type = "string"
-  description = "The domain where to install Cloudron"
+  description = "The domain where to install Cloudron. You need to be able to delegate it to DNS servers which this scenario will provide at the end."
+}
+variable "aws_access_key" {
+  type = "string"
+  default = "" # defaults to empty, because some people have ~/.aws/credentials in place, which is picked up by Terraform
+  description = "AWS Secret Key Id. Get it from https://console.aws.amazon.com/iam/home?region=eu-west-1#/security_credential"
+}
+variable "aws_secret_key" {
+  type = "string"
+  default = ""
+  description = "AWS Secret Key. See above"
 }
 variable "mailgun_api_key" {
   type = "string"
-  description = "Mailgun API Key"
+  description = "Mailgun Secret API Key. Get one from https://app.mailgun.com/app/dashboard (box on the right)"
+  #default = "" # currently cannot make this optional. provider{} section causes some requests which fail on empty api key
+}
+variable "instance_type" {
+  type = "string"
+  default = "t2.micro"
+  description = "(optional) The instance type. Choose one at https://aws.amazon.com/ec2/instance-types/"
+}
+variable "disk_size" {
+  type = "string"
+  default = "22"
+  description = "(optional) Disk size. Defaults to 22GB"
 }
 variable "ec2_public_key_name" {
   type = "string"
-  description = "AWS Public key to allow you to ssh into machine"
+  description = "(optional) AWS Public key to allow you to ssh. Create one at https://eu-west-1.console.aws.amazon.com/ec2/v2/home?region=eu-west-1#KeyPairs:sort=keyName"
   default = ""
 }
 variable "r53_delegation_set" {
   type = "string"
   default = ""
-  description = "Reusable delegation set ID"
+  description = "(optional) This is useful to avoid having a new NS-records set every time you delete/create this stack, when debugging"
 }
-
 variable "region" {
   type = "string"
   default = "eu-west-1"
+  description = "The server location. Choose from http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions"
 }
 variable "version" {
   type = "string"
-  default = "1.6.2"
+  default = "1.6.3"
 }
 variable "cloudron_restore_url" {
   type = "string"
   default = ""
-  description = "Restore from a Backup (URL, must be publicly-accessable)"
+  description = "(optional) Restore from a Backup (URL, must be publicly-accessible)"
 }
 variable "cloudron_restore_key" {
   type = "string"
   default = ""
-  description = "Backup encryption key, if any"
+  description = "(optional) Backup encryption key (as shown at the end of this scenario or set in cloudron manually)"
 }
 # ===================================
 
 provider "aws" {
   region     = "${var.region}"
+  access_key = "${var.aws_access_key}"
+  secret_key = "${var.aws_secret_key}"
 }
 data "aws_caller_identity" "current" {}
 
@@ -67,12 +90,12 @@ variable "images" {
 resource "aws_instance" "cloudron" {
   tags = {Project = "cloudron"}
   ami           = "${var.images[var.region]}"
-  instance_type = "t2.micro"
+  instance_type = "${var.instance_type}"
   key_name = "${var.ec2_public_key_name}"
   user_data = "${data.template_file.user_data.rendered}"
   vpc_security_group_ids  = ["${aws_security_group.cloudron_sg.id}"]
   root_block_device = {
-    volume_size = 22 #GB
+    volume_size = "${var.disk_size}"
   }
 }
 
