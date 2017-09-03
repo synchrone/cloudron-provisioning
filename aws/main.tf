@@ -65,6 +65,7 @@ variable "images" {
 }
 
 resource "aws_instance" "cloudron" {
+  tags = {Project = "cloudron"}
   ami           = "${var.images[var.region]}"
   instance_type = "t2.micro"
   key_name = "${var.ec2_public_key_name}"
@@ -76,6 +77,7 @@ resource "aws_instance" "cloudron" {
 }
 
 resource "aws_s3_bucket" "backups" {
+  tags = {Project = "cloudron"}
   bucket = "cloudron-backups-${data.aws_caller_identity.current.account_id}"
 }
 

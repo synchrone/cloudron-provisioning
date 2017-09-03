@@ -1,5 +1,6 @@
 
 resource "aws_security_group" "cloudron_sg" {
+  tags = {Project = "cloudron"}
   name        = "cloudron-rules"
   description = "Firewall configuration for Cloudron instance"
 

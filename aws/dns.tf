@@ -1,4 +1,5 @@
 resource "aws_route53_zone" "cloudron_zone" {
+  tags = {Project = "cloudron"}
   name = "${var.domain}."
   delegation_set_id = "${var.r53_delegation_set}"
 }
