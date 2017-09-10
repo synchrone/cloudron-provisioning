@@ -11,16 +11,7 @@ data "template_file" "user_data" {
 
   vars {
     domain = "${var.domain}"
-    mail_relay = <<EOF
-{
-    "provider":"mailgun-smtp",
-    "host":"smtp.mailgun.org",
-    "port":"587",
-    "tls":true,
-    "username":"${mailgun_domain.current.smtp_login}",
-    "password":"${mailgun_domain.current.smtp_password}"
-}
-EOF
+    mail_relay = "${data.template_file.mail_relay_config.rendered}"
     cloudronData = <<EOF
 {
   "boxVersionsUrl": "https://s3.amazonaws.com/prod-cloudron-releases/versions.json",

@@ -6,9 +6,6 @@ domain = ""
 aws_access_key = ""
 aws_secret_key = ""
 
-# Mailgun Secret API Key. e.g key-abcegedfafaecghef. Get one from https://app.mailgun.com/app/dashboard (box on the right)
-mailgun_api_key = ""
-
 # The server location. Choose from http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions
 region = "eu-west-1"
 
@@ -19,6 +16,9 @@ instance_type = "t2.micro"
 disk_size = "22"
 
 #===== The following is optional. Uncomment the variables to use: =====
+
+# Mailgun Secret API Key. e.g key-abcegedfafaecghef. Get one from https://app.mailgun.com/app/dashboard (box on the right)
+# mailgun_api_key = ""
 
 # When you have a backup to restore. Should be publicly accessible.
 #cloudron_restore_url="https://s3-eu-west-1.amazonaws.com/cloudron-backups-<your_account>/<date>/box_<date>_<version>.tar.gz"

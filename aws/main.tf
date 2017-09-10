@@ -4,7 +4,7 @@ variable "domain" {
 }
 variable "aws_access_key" {
   type = "string"
-  default = "" # defaults to empty, because some people have ~/.aws/credentials in place, which is picked up by Terraform
+  default = "" # defaults to empty, because some have ~/.aws/credentials in place, which is picked up by Terraform
   description = "AWS Secret Key Id. Get it from https://console.aws.amazon.com/iam/home?region=eu-west-1#/security_credential"
 }
 variable "aws_secret_key" {
@@ -14,8 +14,8 @@ variable "aws_secret_key" {
 }
 variable "mailgun_api_key" {
   type = "string"
-  description = "Mailgun Secret API Key. Get one from https://app.mailgun.com/app/dashboard (box on the right)"
-  #default = "" # currently cannot make this optional. provider{} section causes some requests which fail on empty api key
+  description = "(optional) Mailgun Secret API Key. Get one from https://app.mailgun.com/app/dashboard (box on the right)"
+  default = ""
 }
 variable "instance_type" {
   type = "string"
@@ -44,7 +44,7 @@ variable "region" {
 }
 variable "version" {
   type = "string"
-  default = "1.6.3"
+  default = "1.6.4"
 }
 variable "cloudron_restore_url" {
   type = "string"
