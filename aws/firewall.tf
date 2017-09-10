@@ -46,9 +46,9 @@ resource "aws_security_group" "cloudron_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  ingress { #VPN, custom app
-    from_port   = 7494
-    to_port     = 7494
+  ingress { #Custom apps
+    from_port   = 1024
+    to_port     = 65535
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
