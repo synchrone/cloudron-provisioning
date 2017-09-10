@@ -97,6 +97,16 @@ resource "aws_instance" "cloudron" {
   root_block_device = {
     volume_size = "${var.disk_size}"
   }
+  provisioner "file" {
+    connection {user = "ubuntu"}
+    source      = "${data.template_file.cloudwatch_metrics.rendered}"
+    destination = "/etc/systemd/system/cloudwatch-metrics.service"
+  }
+  provisioner "file" {
+    connection {user = "ubuntu"}
+    source      = "${data.template_file.cloudwatch_logs.rendered}"
+    destination = "/etc/systemd/system/cloudwatch-logs.service"
+  }
 }
 
 resource "aws_s3_bucket" "backups" {
@@ -118,6 +128,9 @@ Thank you for installing Cloudron!
 The cloud resources have been successfully created, but some processes are still active in background.
 
 Please wait a couple minutes and try navigating your browser to https://${var.domain} to finish the installation.
+
+In the meantime, you should subscribe to alarms, to be aware when something is going wrong with your instance:
+https://${var.region}.console.aws.amazon.com/sns/v2/home#/topics/${aws_sns_topic.alarms.arn}
 
 Backups will be stored under https://s3.console.aws.amazon.com/s3/buckets/${aws_s3_bucket.backups.id}
 Backup Encryption Key: ${random_id.backup_key.b64}
