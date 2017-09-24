@@ -11,6 +11,7 @@ data "template_file" "user_data" {
 
   vars {
     domain = "${var.domain}"
+    cloudron_source_url = "${var.cloudron_source_url}"
     mail_relay = "${data.template_file.mail_relay_config.rendered}"
     cloudronData = <<EOF
 {

@@ -27,6 +27,11 @@ variable "disk_size" {
   default = "22"
   description = "(optional) Disk size. Defaults to 22GB"
 }
+variable "disk_type" {
+  type = "string"
+  default = "standard"
+  description = "Can be 'standard', 'gp2', or 'io1'"
+}
 variable "ec2_public_key_name" {
   type = "string"
   description = "(optional) AWS Public key to allow you to ssh. Create one at https://eu-west-1.console.aws.amazon.com/ec2/v2/home?region=eu-west-1#KeyPairs:sort=keyName"
@@ -42,9 +47,14 @@ variable "region" {
   default = "eu-west-1"
   description = "The server location. Choose from http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions"
 }
+variable "backup_region" {
+  type = "string"
+  default = "eu-west-2"
+  description = "The backups (S3) region. Choose one different from 'region' variable value"
+}
 variable "version" {
   type = "string"
-  default = "1.6.4"
+  default = "1.6.5"
 }
 variable "cloudron_restore_url" {
   type = "string"
@@ -55,6 +65,11 @@ variable "cloudron_restore_key" {
   type = "string"
   default = ""
   description = "(optional) Backup encryption key (as shown at the end of this scenario or set in cloudron manually)"
+}
+variable "cloudron_source_url" {
+  type = "string"
+  default = ""
+  description = "(optional) Install cloudron from this distribution URL"
 }
 # ===================================
 
@@ -96,6 +111,7 @@ resource "aws_instance" "cloudron" {
   vpc_security_group_ids  = ["${aws_security_group.cloudron_sg.id}"]
   root_block_device = {
     volume_size = "${var.disk_size}"
+    volume_type = "${var.disk_type}"
   }
   provisioner "file" {
     connection {user = "ubuntu"}
@@ -112,12 +128,11 @@ resource "aws_instance" "cloudron" {
 resource "aws_s3_bucket" "backups" {
   tags = {Project = "cloudron"}
   bucket = "cloudron-backups-${data.aws_caller_identity.current.account_id}"
-}
-
-# ======================================================
-output "zone_ns" {
-  value = "${aws_route53_zone.cloudron_zone.name_servers}"
-  description = "Update your NS records in the domain registrar's control panel to these:"
+  region = "${var.backup_region}"
+  acl    = "public-read" # we use encrypted backups, so public reads are safe. Also cloudron setup script cannot authenticate to s3, so this is the only option.
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 output "cloudron_installation_complete" {
@@ -127,9 +142,15 @@ Thank you for installing Cloudron!
 
 The cloud resources have been successfully created, but some processes are still active in background.
 
-Please wait a couple minutes and try navigating your browser to https://${var.domain} to finish the installation.
+Make sure you delegate your domain '${var.domain}' to these name servers (NS):
+${aws_route53_zone.cloudron_zone.name_servers.0}
+${aws_route53_zone.cloudron_zone.name_servers.1}
+${aws_route53_zone.cloudron_zone.name_servers.2}
+${aws_route53_zone.cloudron_zone.name_servers.3}
 
-In the meantime, you should subscribe to alarms, to be aware when something is going wrong with your instance:
+After that please wait ~15 minutes and try navigating your browser to https://my.${var.domain} to finish the installation.
+
+In the meantime, you should subscribe to alarms, to be notified if something happens on your server:
 https://${var.region}.console.aws.amazon.com/sns/v2/home#/topics/${aws_sns_topic.alarms.arn}
 
 Backups will be stored under https://s3.console.aws.amazon.com/s3/buckets/${aws_s3_bucket.backups.id}
