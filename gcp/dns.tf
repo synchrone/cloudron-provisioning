@@ -23,6 +23,13 @@ resource "google_dns_record_set" "apex" {
   ttl     = "300"
   rrdatas = ["${google_compute_instance.cloudron.network_interface.0.access_config.0.assigned_nat_ip}"]
 }
+resource "google_dns_record_set" "my" { //cloudron normally creates is by itself, but not immediately
+  managed_zone = "${google_dns_managed_zone.cloudron_zone.name}"
+  name    = "my.${var.domain}."
+  type    = "A"
+  ttl     = "300"
+  rrdatas = ["${google_compute_instance.cloudron.network_interface.0.access_config.0.assigned_nat_ip}"]
+}
 resource "google_dns_record_set" "www" {
   managed_zone = "${google_dns_managed_zone.cloudron_zone.name}"
   name    = "*.${var.domain}."
