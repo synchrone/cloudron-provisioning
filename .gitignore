@@ -1,4 +1,12 @@
 *.iml
 *.tfstate
+*.terraform.tfstate.lock.info
 *.tfstate.backup
 *.tfplan
+.terraform
+
+#protect credentials from accidental commit
+gcp/*.json
+
+*.tfvars
+!terraform.tfvars
