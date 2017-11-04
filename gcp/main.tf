@@ -37,6 +37,11 @@ variable "disk_type" {
   default = "pd-ssd"
   description = "(optional) Disk type. pd-ssd or pd-standard for magnetic"
 }
+variable "public_key" {
+  type = "string"
+  default = ""
+  description = "SSH public key to assign"
+}
 variable "region" {
   type = "string"
   default = "us-central1"
@@ -49,7 +54,7 @@ variable "backup_region" {
 }
 variable "version" {
   type = "string"
-  default = "1.6.5"
+  default = "1.7.2"
 }
 variable "cloudron_restore_url" {
   type = "string"
@@ -79,6 +84,7 @@ provider "google" {
 
 resource "google_compute_instance" "cloudron" {
   name = "cloudron"
+  tags = [ "cloudron" ] //attches firewall rules
   machine_type = "${var.instance_type}"
   zone = "${var.region}-a"
 
@@ -98,6 +104,10 @@ resource "google_compute_instance" "cloudron" {
   service_account {
     email = "${google_service_account.cloudron.email}"
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
+  }
+
+  metadata {
+    sshKeys = "root:${var.public_key}\nyellowtent:${var.public_key}"
   }
 
   metadata_startup_script = "${data.template_file.user_data.rendered}"
