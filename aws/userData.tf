@@ -31,6 +31,7 @@ data "template_file" "user_data" {
   },
   "backupConfig" : {
     "provider":"s3",
+    "format": "tgz",
     "key":"${coalesce(var.cloudron_restore_key, random_id.backup_key.b64)}",
     "retentionSecs":2592000,
     "bucket":"${aws_s3_bucket.backups.id}",
