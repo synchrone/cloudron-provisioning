@@ -28,6 +28,7 @@ data "template_file" "user_data" {
   },
   "backupConfig" : {
     "provider":"gcs",
+    "format": "tgz",
     "key":"${coalesce(var.cloudron_restore_key, random_id.backup_key.b64)}",
     "retentionSecs":2592000,
     "bucket":"${google_storage_bucket.backups.name}",
