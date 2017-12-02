@@ -73,11 +73,8 @@ variable "cloudron_source_url" {
 }
 # ===================================
 
-locals {
-  google_credentials = "${var.google_credentials_file != "" ? file(var.google_credentials_file) : var.google_credentials}"
-}
 provider "google" {
-  credentials = "${local.google_credentials}"
+  credentials = "${var.google_credentials_file != "" ? file(var.google_credentials_file) : var.google_credentials}"
   project     = "${var.google_project}"
   region      = "${var.region}"
 }
