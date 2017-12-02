@@ -13,6 +13,7 @@ data "template_file" "user_data" {
     domain = "${var.domain}"
     cloudron_source_url = "${var.cloudron_source_url}"
     mail_relay = "${data.template_file.mail_relay_config.rendered}"
+    version = "${var.version}"
     cloudronData = <<EOF
 {
   "boxVersionsUrl": "https://s3.amazonaws.com/prod-cloudron-releases/versions.json",

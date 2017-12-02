@@ -3,7 +3,7 @@
 runcmd:
   - [ wget, "https://cloudron.io/cloudron-setup" ]
   - [ chmod, +x, cloudron-setup ]
-  - './cloudron-setup --skip-reboot ${var.cloudron_source_url != '' ? "--source-url ${var.cloudron_source_url}" : ""} --data ''${replace(cloudronData, "\n", "")}'''
+  - './cloudron-setup --skip-reboot ${cloudron_source_url != "" ? "--source-url ${cloudron_source_url}" : ""} --data ''${replace(cloudronData, "\n", "")}'''
 
   #hack mail relay since it's not supported in Data (1.2.0+)
   - mysql -u root -ppassword -e "REPLACE INTO settings (name, value) VALUES (\"mail_relay\", '${replace(replace(mail_relay,"\"","\\\""),"\n","")}')" box

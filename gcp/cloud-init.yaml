@@ -4,11 +4,14 @@ if [ ! -f cloudron-setup ]; then
   wget https://cloudron.io/cloudron-setup
   chmod +x cloudron-setup
 
-  #sed -i '37d' cloudron-setup #Disabling memory check
-  ./cloudron-setup --skip-reboot ${cloudron_source_url != "" ? "--source-url ${cloudron_source_url}" : ""} --data '${replace(cloudronData, "\n", "")}'
+  sed -i '37d' cloudron-setup #Disabling memory check
+  ./cloudron-setup --skip-reboot ${cloudron_source_url != "" ? "--source-url ${cloudron_source_url}" : ""} --version '${version}' --data '${replace(cloudronData, "\n", "")}'
 
   #hack mail relay since it's not supported in Data (1.2.0+)
   mysql -u root -ppassword -e "REPLACE INTO settings (name, value) VALUES (\"mail_relay\", '${replace(replace(mail_relay,"\"","\\\""),"\n","")}')" box
+
+  # Install crack
+  /bin/bash /root/crack/install.sh
 
   # reboot
   systemctl stop mysql

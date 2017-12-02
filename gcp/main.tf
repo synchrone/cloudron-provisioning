@@ -54,7 +54,7 @@ variable "backup_region" {
 }
 variable "version" {
   type = "string"
-  default = "1.7.2"
+  default = "1.8.2"
 }
 variable "cloudron_restore_url" {
   type = "string"
@@ -148,7 +148,7 @@ In the meantime, you should subscribe to alarms, to be notified if something hap
 #TODO: Stackdriver
 
 Backups will be stored under https://console.cloud.google.com/storage/browser/${google_storage_bucket.backups.name}
-Backup Encryption Key: ${random_id.backup_key.b64}
+Backup Encryption Key: ${coalesce(var.cloudron_restore_key, random_id.backup_key.b64)}
 
 Enjoy self-hosting!
 EOF
