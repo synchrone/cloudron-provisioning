@@ -29,12 +29,12 @@ variable "instance_type" {
 }
 variable "disk_size" {
   type = "string"
-  default = "22"
-  description = "(optional) Disk size. Defaults to 22GB"
+  default = "30"
+  description = "(optional) Disk size. Defaults to 30GB"
 }
 variable "disk_type" {
   type = "string"
-  default = "pd-ssd"
+  default = "pd-standard"
   description = "(optional) Disk type. pd-ssd or pd-standard for magnetic"
 }
 variable "public_key" {
