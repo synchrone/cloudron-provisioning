@@ -147,6 +147,20 @@ resource "aws_s3_bucket" "backups" {
   bucket = "cloudron-backups-${data.aws_caller_identity.current.account_id}"
   region = "${var.backup_region}"
   acl    = "public-read" # we use encrypted backups, so public reads are safe. Also cloudron setup script cannot authenticate to s3, so this is the only option.
+  policy =  <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AddPerm",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::cloudron-backups-${data.aws_caller_identity.current.account_id}/*"
+        }
+    ]
+}
+EOF
   lifecycle {
     prevent_destroy = true
   }
