@@ -10,9 +10,6 @@ if [ ! -f cloudron-setup ]; then
   #hack mail relay since it's not supported in Data (1.2.0+)
   mysql -u root -ppassword -e "REPLACE INTO settings (name, value) VALUES (\"mail_relay\", '${replace(replace(mail_relay,"\"","\\\""),"\n","")}')" box
 
-  # Install crack
-  /bin/bash /root/crack/install.sh
-
   # reboot
   systemctl stop mysql
   systemctl reboot
