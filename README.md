@@ -25,4 +25,6 @@ Optionally `terraform plan`, if you want to know which resources will be created
 
 Destroying
 ===
-1. `terraform destroy` in the same directory where you ran `terraform apply`. This uses a `terraform.tfstate` file, which is created by `apply` command.
+1. `./destroy.sh` in the same directory where you ran `terraform apply`. This uses a `terraform.tfstate` file, which is created by `apply` command.
+
+Note: this does not destroy your backups bucket and the hosted DNS zone
