@@ -141,9 +141,6 @@ ${google_dns_managed_zone.cloudron_zone.name_servers.3}
 
 After that please wait ~15 minutes and try navigating your browser to https://my.${var.domain} to finish the installation.
 
-In the meantime, you should subscribe to alarms, to be notified if something happens on your server:
-#TODO: Stackdriver
-
 Backups will be stored under https://console.cloud.google.com/storage/browser/${google_storage_bucket.backups.name}
 Backup Encryption Key: ${coalesce(var.cloudron_restore_key, random_id.backup_key.b64)}
 
