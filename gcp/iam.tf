@@ -18,14 +18,13 @@ data "google_iam_policy" "cloudron" {
     members = ["serviceAccount:${google_service_account.cloudron.email}"]
   }
 
-// TODO: Stackdriver
-//  binding {
-//    role = "<logs>"
-//    members = ["serviceAccount:${google_service_account.cloudron.email}"]
-//  }
-//
-//  binding {
-//    role = "<metrics>"
-//    members = ["serviceAccount:${google_service_account.cloudron.email}"]
-//  }
+  binding {
+    role = "roles/monitoring.metricWriter"
+    members = ["serviceAccount:${google_service_account.cloudron.email}"]
+  }
+
+  binding {
+    role = "roles/logging.logWriter"
+    members = ["serviceAccount:${google_service_account.cloudron.email}"]
+  }
 }
