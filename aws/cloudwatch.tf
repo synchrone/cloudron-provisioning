@@ -1,7 +1,7 @@
 # ===================== Logs
 resource "aws_cloudwatch_log_group" "cloudron" {
   name = "CloudronLogs"
-  retention_in_days = 31
+  retention_in_days = 1
   tags {Project = "cloudron"}
 }
 data "template_file" "cloudwatch_logs" {

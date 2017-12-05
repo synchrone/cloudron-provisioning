@@ -3,7 +3,12 @@ resource "google_service_account" "cloudron" {
   display_name = "Cloudron"
 }
 
-data "google_iam_policy" "admin" {
+resource "google_project_iam_policy" "cloudron" {
+  project     = "${var.google_project}"
+  policy_data = "${data.google_iam_policy.cloudron.policy_data}"
+}
+
+data "google_iam_policy" "cloudron" {
   binding {
     role = "roles/dns.admin"
     members = ["serviceAccount:${google_service_account.cloudron.email}"]
